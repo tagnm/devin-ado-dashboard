@@ -1,0 +1,16 @@
+{
+  "metrics": {
+    "workItems": {
+      "greenMax": 20,
+      "amberMax": 30
+    },
+    "activeItems": {
+      "greenMax": 10,
+      "amberMax": 15
+    },
+    "openPullRequests": {
+      "greenMax": 3,
+      "amberMax": 7
+    }
+  }
+}
