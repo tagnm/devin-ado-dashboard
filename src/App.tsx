@@ -31,11 +31,22 @@ import {
 } from './services/dashboardConfig'
 import './App.css'
 
+function useHashRoute() {
+  const [route, setRoute] = useState(() => window.location.hash || '#/')
+  useEffect(() => {
+    const onHashChange = () => setRoute(window.location.hash || '#/')
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+  return route
+}
+
 function App() {
   const [query, setQuery] = useState('')
   const [items, setItems] = useState<WorkItem[]>([])
   const [config, setConfig] = useState(defaultDashboardConfig)
   const [loading, setLoading] = useState(true)
+  const route = useHashRoute()
 
   useEffect(() => {
     let cancelled = false
@@ -65,6 +76,18 @@ function App() {
     [items],
   )
 
+  const openPrRows = useMemo(
+    () =>
+      items
+        .flatMap((item) =>
+          item.pullRequests
+            .filter((pr) => pr.status === 'open' || pr.status === 'draft')
+            .map((pr) => ({ pr, item })),
+        )
+        .sort((a, b) => (b.pr.updatedAt || '').localeCompare(a.pr.updatedAt || '')),
+    [items],
+  )
+
   return (
     <main className="dashboard">
       <header className="app-header">
@@ -85,9 +108,12 @@ function App() {
         <Metric label="Work items" value={totals.workItems} thresholds={config.metrics.workItems} icon={<ClipboardList size={18} aria-hidden="true" />} />
         <Metric label="Active items" value={totals.active} thresholds={config.metrics.activeItems} icon={<Activity size={18} aria-hidden="true" />} />
         <Metric label="Sessions" value={totals.sessions} icon={<Cloud size={18} aria-hidden="true" />} />
-        <Metric label="Open PRs" value={totals.openPrs} thresholds={config.metrics.openPullRequests} icon={<GitPullRequest size={18} aria-hidden="true" />} />
+        <Metric label="Open PRs" value={totals.openPrs} thresholds={config.metrics.openPullRequests} icon={<GitPullRequest size={18} aria-hidden="true" />} href="#/prs" />
       </section>
 
+      {route === '#/prs' ? (
+        <PrsPage rows={openPrRows} loading={loading} />
+      ) : (
       <section className="workspace" aria-labelledby="workspace-title">
         <div className="toolbar">
           <div>
@@ -142,8 +168,98 @@ function App() {
           </table>
         </div>
       </section>
+      )}
     </main>
   )
+}
+
+function PrsPage({
+  rows,
+  loading,
+}: {
+  rows: { pr: PullRequest; item: WorkItem }[]
+  loading: boolean
+}) {
+  return (
+    <section className="workspace" aria-labelledby="prs-title">
+      <div className="toolbar">
+        <div>
+          <h2 id="prs-title">Open pull requests</h2>
+          <span className="result-count">
+            {loading ? 'Loading records' : `${rows.length} records`}
+            {' · '}
+            <a className="back-link" href="#/">Back to work items</a>
+          </span>
+        </div>
+      </div>
+
+      <div className="table-frame" aria-busy={loading}>
+        <table className="data-table prs-table">
+          <thead>
+            <tr>
+              <th scope="col" className="id-column"><TableHead icon={<GitPullRequest size={14} />} label="Pull request" /></th>
+              <th scope="col">Title</th>
+              <th scope="col" className="state-column">Status</th>
+              <th scope="col"><TableHead icon={<Ticket size={14} />} label="Work item" /></th>
+              <th scope="col">Branch</th>
+              <th scope="col">Last updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="table-message">
+                  <LoaderCircle className="spin" size={24} aria-hidden="true" />
+                  Loading pull requests…
+                </td>
+              </tr>
+            ) : rows.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="table-message">
+                  <Inbox size={24} aria-hidden="true" />
+                  No open pull requests.
+                </td>
+              </tr>
+            ) : (
+              rows.map(({ pr, item }) => (
+                <tr key={`${item.id}-${pr.id}`}>
+                  <td className="id-cell">
+                    <a href={pr.url} target="_blank" rel="noreferrer" aria-label={`Open ${pr.id}`}>
+                      {pr.id}
+                      <ExternalLink size={12} aria-hidden="true" />
+                    </a>
+                  </td>
+                  <td className="title-cell">{pr.title}</td>
+                  <td><StatusTag value={pr.status} /></td>
+                  <td className="id-cell">
+                    <WorkItemTypeIcon type={item.type} />
+                    <a href={item.url} target="_blank" rel="noreferrer">{item.id}</a>
+                  </td>
+                  <td className="secondary-value branch" title={`${pr.sourceBranch} → ${pr.targetBranch}`}>
+                    {pr.sourceBranch}
+                  </td>
+                  <td className="date-cell">{formatDate(pr.updatedAt)}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  )
+}
+
+function formatDate(iso: string | null) {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return '—'
+  return d.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 }
 
 function TableHead({ icon, label }: { icon: React.ReactNode; label: string }) {

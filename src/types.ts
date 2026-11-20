@@ -18,6 +18,7 @@ export interface PullRequest {
   status: PrStatus
   sourceBranch: string
   targetBranch: string
+  updatedAt: string | null
 }
 
 export type WorkItemState = 'New' | 'Active' | 'Resolved' | 'Closed'

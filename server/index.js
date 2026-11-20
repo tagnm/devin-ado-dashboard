@@ -215,6 +215,20 @@ app.get('/api/workitems', async (req, res) => {
               signal: AbortSignal.timeout(15000),
             })
             prDetails[ref.key] = pr
+            try {
+              const commitsUrl = `https://dev.azure.com/${encodeURIComponent(ADO_ORG)}/${encodeURIComponent(ref.projectId)}/_apis/git/repositories/${encodeURIComponent(ref.repoId)}/pullrequests/${ref.prId}/commits?api-version=${API_VERSION}`
+              const commits = await adoFetch(commitsUrl, {
+                signal: AbortSignal.timeout(15000),
+              })
+              const dates = (commits.value || [])
+                .map((c) => c.author?.date || c.committer?.date)
+                .filter(Boolean)
+              if (dates.length > 0) {
+                pr.updatedAt = dates.reduce((a, b) => (a > b ? a : b))
+              }
+            } catch {
+              // ignore - fall back to creationDate below
+            }
           } catch (err) {
             console.warn(
               `Could not fetch PR ${ref.prId} in ${ref.projectId}/${ref.repoId}: ${err.message}`,
@@ -238,6 +252,7 @@ app.get('/api/workitems', async (req, res) => {
           status,
           sourceBranch: (pr.sourceRefName || '').replace('refs/heads/', ''),
           targetBranch: (pr.targetRefName || '').replace('refs/heads/', ''),
+          updatedAt: pr.updatedAt || pr.creationDate || null,
         }
         wi.pullRequests.push(prObj)
 

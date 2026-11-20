@@ -80,6 +80,20 @@ h2 {
   border-right: 0;
 }
 
+.metric-linked {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.metric-linked:hover {
+  background: var(--color-blue-10);
+}
+
+.metric-linked:hover .metric-label {
+  color: var(--color-blue-60);
+}
+
 .metric-label {
   display: flex;
   align-items: center;
@@ -126,6 +140,13 @@ h2 {
   font-family: var(--font-mono);
   font-size: 14px;
   text-transform: uppercase;
+}
+
+.date-cell {
+  color: var(--color-gray-60);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 .search-field {
@@ -210,6 +231,13 @@ h2 {
 .data-table th:nth-child(3) { width: 10%; }
 .data-table th:nth-child(4) { width: 14%; }
 .data-table th:nth-child(5) { width: 43%; }
+
+.prs-table th:first-child { width: 9%; }
+.prs-table th:nth-child(2) { width: 31%; }
+.prs-table th:nth-child(3) { width: 9%; }
+.prs-table th:nth-child(4) { width: 12%; }
+.prs-table th:nth-child(5) { width: 23%; }
+.prs-table th:nth-child(6) { width: 16%; }
 
 .data-table td {
   min-height: 44px;
