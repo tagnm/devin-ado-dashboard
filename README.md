@@ -41,7 +41,7 @@ ADO_PROJECT=your-ado-project
 ADO_REPO_NAME=your-repo-name
 ADO_PAT=<your Azure DevOps PAT>
 ADO_WIQL_FILTER=AND [System.AreaPath] UNDER 'Your Project\Your Area' AND [System.WorkItemType] = 'User Story'
-PORT=3000
+PORT=3400
 ADO_API_VERSION=7.1
 ```
 
@@ -65,11 +65,11 @@ Then:
 podman compose up -d --build
 ```
 
-Open http://localhost:3000
+Open http://localhost:3400
 
 ## Development
 
-The Compose setup runs a Vite dev server with HMR on port 3000 and a Node watch-mode backend on 3001 (proxied at `/api`). Source edits apply without rebuilding.
+The Compose setup runs a Vite dev server with HMR on port 3400 and a Node watch-mode backend on 3001 (proxied at `/api`). Source edits apply without rebuilding.
 
 ## Scripts
 
