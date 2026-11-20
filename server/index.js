@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3400
 
 const ADO_ORG = process.env.ADO_ORG
 const ADO_PROJECT = process.env.ADO_PROJECT
