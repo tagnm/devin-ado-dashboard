@@ -170,6 +170,7 @@ app.get('/api/workitems', async (req, res) => {
         id: wi.id,
         title: wi.fields['System.Title'],
         state: wi.fields['System.State'],
+        type: wi.fields['System.WorkItemType'],
         url: `https://dev.azure.com/${encodeURIComponent(ADO_ORG)}/${encodeURIComponent(ADO_PROJECT)}/_workitems/edit/${wi.id}`,
         sessions: [],
         pullRequests: [],

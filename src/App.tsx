@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   Activity,
   Ban,
+  BookOpen,
+  Bug,
   Check,
   Circle,
   CircleCheck,
@@ -160,11 +162,13 @@ function Metric({
   value,
   thresholds,
   icon,
+  href,
 }: {
   label: string
   value: number
   thresholds?: MetricThresholds
   icon: React.ReactNode
+  href?: string
 }) {
   const trafficState: TrafficState = !thresholds
     ? 'neutral'
@@ -174,12 +178,34 @@ function Metric({
         ? 'amber'
         : 'red'
 
-  return (
-    <div className={`metric metric-${trafficState}`}>
+  const body = (
+    <>
       <span className="metric-label">{icon}{label}</span>
       <strong>{value}</strong>
       <span className="metric-state">{trafficState}</span>
-    </div>
+    </>
+  )
+  const className = `metric metric-${trafficState}${href ? ' metric-linked' : ''}`
+  return href ? (
+    <a className={className} href={href}>{body}</a>
+  ) : (
+    <div className={className}>{body}</div>
+  )
+}
+
+function WorkItemTypeIcon({ type }: { type: WorkItem['type'] }) {
+  const isBug = type === 'Bug'
+  const Icon = isBug ? Bug : BookOpen
+  const label = type || 'Work item'
+  return (
+    <span
+      className={`wi-type-icon ${isBug ? 'wi-type-bug' : 'wi-type-story'}`}
+      title={label}
+      aria-label={label}
+      role="img"
+    >
+      <Icon size={14} aria-hidden="true" />
+    </span>
   )
 }
 
@@ -187,6 +213,7 @@ function WorkItemRow({ item }: { item: WorkItem }) {
   return (
     <tr>
       <td className="id-cell">
+        <WorkItemTypeIcon type={item.type} />
         <a href={item.url} target="_blank" rel="noreferrer" aria-label={`Open work item ${item.id}`}>
           {item.id}
           <ExternalLink size={12} aria-hidden="true" />

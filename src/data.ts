@@ -5,6 +5,7 @@ export const mockWorkItems: WorkItem[] = [
     id: 1234,
     title: 'Add single sign-on to customer portal',
     state: 'Active',
+    type: 'User Story',
     url: 'https://dev.azure.com/org/project/_workitems/edit/1234',
     sessions: [
       {
@@ -37,6 +38,7 @@ export const mockWorkItems: WorkItem[] = [
     id: 1235,
     title: 'Fix payment gateway timeout',
     state: 'Resolved',
+    type: 'Bug',
     url: 'https://dev.azure.com/org/project/_workitems/edit/1235',
     sessions: [
       {
@@ -62,6 +64,7 @@ export const mockWorkItems: WorkItem[] = [
     id: 1236,
     title: 'Update dashboard navigation',
     state: 'New',
+    type: 'User Story',
     url: 'https://dev.azure.com/org/project/_workitems/edit/1236',
     sessions: [
       {

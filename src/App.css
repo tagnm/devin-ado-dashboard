@@ -251,6 +251,25 @@ h2 {
   gap: .25rem;
 }
 
+.id-cell {
+  white-space: nowrap;
+}
+
+.wi-type-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: .375rem;
+  vertical-align: -2px;
+}
+
+.wi-type-story {
+  color: var(--color-wi-story);
+}
+
+.wi-type-bug {
+  color: var(--color-wi-bug);
+}
+
 .title-cell {
   font-weight: 500;
 }
