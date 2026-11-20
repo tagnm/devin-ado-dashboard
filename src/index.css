@@ -1,7 +1,7 @@
 :root {
-  --color-blue-60: #0063b1;
-  --color-blue-70: #004f8e;
-  --color-blue-10: #e5f1fa;
+  --color-blue-60: #0f62fe;
+  --color-blue-70: #0043ce;
+  --color-blue-10: #edf5ff;
   --color-gray-100: #161616;
   --color-gray-90: #262626;
   --color-gray-80: #393939;
@@ -12,7 +12,11 @@
   --color-gray-20: #e0e0e0;
   --color-gray-10: #f4f4f4;
   --color-white: #ffffff;
-  --focus-ring: #0063b1;
+  --color-link: #0f62fe;
+  --color-link-hover: #0043ce;
+  --color-wi-story: #f1c21b;
+  --color-wi-bug: #da1e28;
+  --focus-ring: #0f62fe;
   --font-sans: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
   --font-mono: "IBM Plex Mono", Consolas, monospace;
   color: var(--color-gray-100);
@@ -47,11 +51,14 @@ input {
 }
 
 a {
-  color: var(--color-blue-60);
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 a:hover {
-  color: var(--color-blue-70);
+  color: var(--color-link-hover);
 }
 
 a:focus-visible,

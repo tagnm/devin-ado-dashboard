@@ -260,12 +260,12 @@ h2 {
 }
 
 .data-table tbody tr:hover td {
-  background: #f8f8f8;
+  background: var(--color-gray-10);
 }
 
 .id-cell a,
 .entity-list a {
-  color: var(--color-blue-70);
+  color: var(--color-link);
   font-family: var(--font-mono);
   font-weight: 600;
   text-decoration: underline;
@@ -321,7 +321,7 @@ h2 {
 
 .status-active,
 .status-open {
-  color: #00467d;
+  color: #002d9c;
   background: var(--color-blue-10);
   border-color: var(--color-blue-60);
 }
@@ -542,14 +542,21 @@ h2 {
     background: var(--color-gray-80);
   }
 
-  .id-cell a,
-  .entity-list a {
-    color: #78b7e5;
+  :root {
+    --color-link: #78a9ff;
+    --color-link-hover: #a6c8ff;
   }
 
-  .id-cell a:hover,
-  .entity-list a:hover {
-    color: #a6d0ee;
+  .metric-linked {
+    color: inherit;
+  }
+
+  .metric-linked:hover {
+    background: var(--color-gray-80);
+  }
+
+  .metric-linked:hover .metric-label {
+    color: var(--color-link);
   }
 
   .status-tag {
@@ -561,8 +568,8 @@ h2 {
   .status-active,
   .status-open {
     color: var(--color-white);
-    background: #003a68;
-    border-color: #78b7e5;
+    background: #002d9c;
+    border-color: #78a9ff;
   }
 
   .status-new,
